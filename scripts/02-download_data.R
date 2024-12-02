@@ -24,9 +24,6 @@ library(here)
 
 childrens.books <- read_tsv("https://raw.githubusercontent.com/tacookson/data/master/childrens-book-ratings/childrens-books.txt")
 
-
-
-
 #### Save data ####
 write_csv(childrens.books, "data/01-raw_data/childrens.books.csv") 
 

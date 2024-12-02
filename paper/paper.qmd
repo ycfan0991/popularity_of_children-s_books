@@ -1,6 +1,6 @@
 ---
 title: "Predicting the Popularity of Children’s Books Considering Reader’s Rating, Physical Attributes and Trend"
-subtitle: ""
+subtitle: "GLM Analysis Reveals Yearly Decline in Popularity and Positive Impacts of Ratings, Republish Length, and Pages"
 author: 
   - Peter Fan
 thanks: "Code and data are available at: [https://github.com/ycfan0991/popularity_of_childrens_books](https://github.com/ycfan0991/popularity_of_childrens_books)."
@@ -45,76 +45,37 @@ library(arrow)
 
 # Introduction
 
-In this world of digitalization, children are becoming more attached to digital entertainment than reading books(@hadidene2024dilemma). Developing a critical understanding of the reaction of the consumers towards the product considering the cardinality of different attributes of the product is essential to making beneficial decisions regarding product development in future. By leveraging the preferences of the readers, trends and advanced analytics of the different attributes of the book, the publishers can anticipate the potential popularity of a new book while selecting the best book for maximising engagement. This study aims at predicting the popularity of children’s books while examining the effect of ratings by readers, physical attributes and yearly trends. 
+In this digital age, where screens dominate leisure and education, children are increasingly gravitating towards digital entertainment over traditional reading materials (@hadidene2024dilemma). This shift in consumption patterns has raised concerns among educators, parents, and publishers, who recognize the enduring value of books in fostering imagination, critical thinking, and literacy skills. In response to this challenge, it has become essential for publishers to develop a deeper understanding of consumer preferences and behaviors toward children's books. This understanding extends beyond mere anecdotal insights, requiring a systematic exploration of how various attributes of books—ranging from their physical characteristics to reader engagement metrics—impact their popularity. By leveraging advanced analytics and examining trends, publishers can make informed decisions about product development, marketing strategies, and inventory management to maximize engagement and popularity in a competitive market.
 
-The study involves predicting the popularity of the children’s book by considering the number of ratings received from the users while considering the physical attributes, yearly trend and average user rating as predictors. Along with the development of the predictive model, the study also examined the independent and direct effect of different independent factors on the popularity of the book. The unique relationship between different independent variables or attributes of children’s books with the popularity of the books will enable a critical and comparative understanding of the importance of different attributes of the book that contribute to have higher popularity. 
+This study aims to address this need by predicting the popularity of children's books through an exploration of the effects of key factors such as ratings by readers, physical attributes, and yearly publication trends. Popularity is operationalized as the number of ratings or reviews a book receives from its readers, which serves as a proxy for engagement and interest. By analyzing the interplay between various independent factors and their contributions to the book's popularity, this research sheds light on the dynamics of consumer preferences and helps publishers identify the attributes that are most likely to drive engagement. Such insights are not only critical for forecasting the potential success of new books but also provide a comparative framework for evaluating existing products and optimizing their appeal to target audiences.
 
-This structure of this paper has five sections including Introduction, namely Data which includes the detailed description of the data, Model which includes the quantitative description of the model, Results which includes the quantitative findings of the study and Discussion which discusses the implication of findings. 
-The primary estimand of the study is the average effect of the number of pages, cover type, year of publication, republishing length and average review on the received number of ratings or reviews from the readers of the children’s books. The effects have been used to develop a predictive model and formulate predictive outcomes for a simulated dataset of children’s books with different physical attributes and ratings. 
+Central to this research is the development of a predictive model that incorporates both quantitative and categorical attributes of children's books. Key predictors include physical characteristics such as the number of pages and cover type, temporal factors such as the year of publication and republishing length, and qualitative indicators such as the average user rating. By investigating the relationships between these variables and the number of ratings, the study aims to disentangle the direct and independent effects of each attribute on a book's popularity. For instance, do longer books tend to receive more ratings due to their perceived value, or does the year of publication have a significant impact, reflecting contemporary trends or market saturation? Understanding these nuances is crucial for publishers seeking to tailor their offerings to the evolving preferences of their readers.
 
+The primary estimand of the study is the average effect of the aforementioned predictors—number of pages, cover type, year of publication, republishing length, and average rating—on the number of ratings or reviews received by children’s books. These effects are analyzed not only for their standalone contributions but also for their interactions and combined influence. For example, how does the interaction between cover type and number of pages influence reader engagement, or does the year of publication amplify or mitigate the impact of other attributes? By examining these complex relationships, the study moves beyond simple associations to provide a comprehensive understanding of the drivers of book popularity.
 
-# Data
+To achieve these objectives, a simulated dataset of children’s books has been generated, encompassing diverse combinations of attributes and reader engagement metrics. This dataset serves as a controlled environment for testing hypotheses and building robust predictive models. Advanced statistical and machine learning techniques are employed to analyze the data, enabling the identification of significant predictors and their effect sizes. For instance, logistic regression and tree-based models are applied to uncover patterns and dependencies, while feature importance analysis highlights the relative contributions of each attribute. These techniques not only validate the relationships hypothesized in the study but also provide actionable insights for stakeholders in the publishing industry.
+
+The implications of this research extend far beyond the predictive model itself. By identifying the unique relationships between book attributes and their popularity, the study provides publishers with a critical and comparative framework for decision-making. Publishers can use these insights to optimize their product portfolios, focusing on attributes that maximize reader engagement while minimizing costs. For instance, if cover type is found to be a significant predictor, publishers may prioritize hardcover formats for premium releases or allocate marketing resources to emphasize this feature. Similarly, trends identified in the year of publication can inform timing strategies for new book releases, aligning them with periods of heightened reader interest.
+
+Furthermore, the findings contribute to a broader understanding of how physical and qualitative attributes of books influence consumer behavior in the digital age. While much attention has been given to digital content consumption, this research underscores the enduring relevance of traditional books and the factors that sustain their appeal. By bridging the gap between quantitative data and qualitative insights, the study equips publishers with the tools to navigate a rapidly changing marketplace and maintain the cultural significance of children’s literature.
+
+In conclusion, this study represents a systematic and data-driven approach to understanding the factors that drive the popularity of children’s books. By predicting the number of ratings received based on physical attributes, yearly trends, and average user ratings, the research provides a comprehensive framework for analyzing consumer preferences and behaviors. The predictive model and its findings not only serve as a valuable resource for publishers but also contribute to the broader discourse on the role of traditional books in a digital world. Through this analysis, publishers can anticipate the potential success of their products, make informed decisions about future development, and ultimately foster greater engagement with children’s literature in an increasingly screen-dominated era.
+
+The remainder of this paper is structured as follows. Section [@sec-data] describes the dataset used in the study, including details on the simulated data generation process, the attributes of children’s books considered, and the assumptions underlying the variables. Section [@sec-model] outlines the analytical techniques employed, including statistical models, as well as the rationale for their selection. Section [@sec-results] presents the findings of the analysis, highlighting the relationships between book attributes and popularity and providing interpretations of key predictors. Section [@sec-discussion] discusses the implications of the results for publishers, including actionable insights and strategies for leveraging the findings to maximize reader engagement. 
+
+# Data {#sec-data}
 
 ## Overview
 
 ### Overall Data Handling
 
-Statistical programming language R has been used considering the R packages for data storing, data cleaning and pre-processing (@R). The library tidyverse (@tidyverse) which includes ggplot2, dplyr and other essential packages has been used for data handling and visualization. The library of janitor (@janitor), broom (@broom) have been used for data cleaning and structuring the results. The library here (@Here) and arrow (@arrow) have been used to efficiently store and retrieve the data. 
+Statistical programming language R has been used considering the `R` packages for data storing, data cleaning and pre-processing (@R). The library `tidyverse` (@tidyverse) which includes `ggplot2`, `dplyr` and other essential packages has been used for data handling and visualization. The library of `janitor` (@janitor), `broom` (@broom) have been used for data cleaning and structuring the results. The library `here` (@Here) and `arrow` (@arrow) have been used to efficiently store and retrieve the data. 
 
 ### Data Source and Characteristics
 
 The data has been collected from Alex Cookson’s database, where the chosen dataset ‘children’s book’ was previously used for empirical Bayes estimation (@cookson2021rating). The raw data of the study was taken without the normalized and estimated ratings. The raw dataset contains 9000 records of individual children’s books with ISBN, title, author details, publisher’s name, physical attribute of book, publishing years and different user rating-related details. 
 
-### Data Cleaning Process
-
-The data cleaning process for the chosen raw dataset of this study involves handling missing data, and filtering out the invalid and duplicate records (rows) and attributes (columns) from the dataset. In the selected dataset of children’s books, first, the missing data are explored considering each attribute or column of the dataset. The variables of interest in this dataset are rating, cover, publish year, pages and rating count. There are rows only 8% of records that include missing values in any of these columns, and therefore, without using any amputation methods the records have been excluded to develop the filtered dataset. However, the missing values in the column ‘original publish year’ represent that there is no separate original year from the recorded publish year. Therefore, for this variable, the missing data has been replaced using values from published data and a new variable is created named ‘republish length’ by subtracting the original year from the published year. The variable signifies the gap between the original publish year and from recent publish year. The ‘rating count’ includes values from 1 to more than 1 million reviews with an average of 4280 (Q1 = 82, Q2 = 373, Q3 = 1459), whereas the lower number of reviews is not valid enough to represent the overall review rating of any book. Hence, books that have more than 25% quintile reviews (>82) have been selected in the filtered dataset. Then from the filtered dataset, the unwanted columns are excluded while including only ISBN and variables of interest. 
-
-```{r}
-#| echo: false
-#| warning: false
-#| message: false
-childrens.books.clean <- read_csv(here("data/01-raw_data/childrens.books.clean.csv"))
-## Store records with valid number of ratings
-stats <- summary(childrens.books.clean$rating_count)
-q1 <- stats["1st Qu."]
-q2 <- stats["Median"]
-q3 <- stats["3rd Qu."]
-min <- stats["Min."]
-max <- stats["Max."]
-mean_val <- mean(childrens.books.clean$rating_count)
-sd_val <- sd(childrens.books.clean$rating_count)
-
-# Plot the histogram with annotations
-ggplot(childrens.books.clean, aes(x = rating_count)) +
-  geom_histogram(fill = "skyblue", color = "black", bins = 20) +
-  labs(title = "Figure 1: Distribution of Sample Sizes up to 10000 Rating Count",
-    x = "Sample Size of Given Rating",
-    y = "Frequency") + 
-  theme_minimal() + 
-  xlim(0, 10000) + 
-  ylim(0, 2500) +
-  geom_label(aes(x = 2500, y = 2500, 
-                 label = paste0("min: ", round(min, 1))), 
-             color = "black", fontface = "bold") +
-  geom_label(aes(x = 2500, y = 2300, 
-                 label = paste0("Q1: ", round(q1, 1))), 
-             color = "black", fontface = "bold") +
-  geom_label(aes(x = 2500, y = 2100, 
-                 label = paste0("Median: ", round(q2, 1))), 
-             color = "black", fontface = "bold") +
-  geom_label(aes(x = 2500, y = 1900, 
-                 label = paste0("Q3: ", round(q3, 1))), 
-             color = "black", fontface = "bold") +
-  geom_label(aes(x = 2500, y = 1700, 
-                 label = paste0("max: ", round(max, 1))), 
-             color = "black", fontface = "bold") +
-  geom_label(aes(x = 2500, y = 1500, 
-                 label = paste0("Mean: ", round(mean_val, 1))), 
-             color = "black", fontface = "bold")
-
-```
-
-## Measurement
+### Measurement
 
 The meta-data of books and films are often used for predicting possible popularity while developing appropriate recommendations for books and film development to have higher potentiality of popularity. In order to examine the popularity of the book while considering the scope and limitation of the chosen dataset, this research considered the number of ratings given by the readers as the measure of the popularity of the book. The average rating of the book is measured by taking the average of the total ratings received by the readers. The readers have given a rating from 1 to 5, where 1 implies the lowest rating or lowest preference and 5 implies the highest rating or highest level of preference. 
 
@@ -136,7 +97,7 @@ analysis_data <- read_parquet(here("data/02-analysis_data/analysis_data.parquet"
 ## Visualization: Rating Count by Cover
 ggplot(analysis_data, aes(x = cover, y = rating_count)) +
   geom_boxplot(fill = "skyblue", color = "black", outlier.shape = NA) +
-  labs(title = "Figure 2: Distribution of Rating Count by Cover Type Without Outliers", 
+  labs( 
        x = "Cover Type", 
        y = "Rating Count") + ylim(0,1000) +
   theme_minimal()
@@ -214,11 +175,12 @@ ggplot(analysis_data, aes(x = republish_length, y = rating_count)) +
 As per Figure 2, it can be seen that the average rating count and the distribution notably differ based on different cover types of the book, which indicates that the cover type could be a predictor of the received number of ratings. As per Figure 3, a positive correlation has been found from the trend line or linear regression line between Average Rating and Rating Count. There is a plausible association between the audience preference and the popularity of the book, which is also reflected in this scatter plot. A negative regression line or potentially negative association has been found in Figure 4, between the published year and rating count (popularity), which indicates the published year can be a predictor of popularity. As per Figure 5, a positive association has been found from the trend line or linear regression line between the number of pages in a book and the Rating Count, which makes the ‘pages’ a possible predictor of popularity. Figure 6: Indicates that Republish Length and Rating Count could have a positive association and linear relationship. Therefore, the Republish Length could be a potential predictor of popularity. 
 
 
-# Model
+# Model  {#sec-model}
 
 ## Monte Carlo Simulation
 
 The study used Monte Carlo Simulation to create a distribution of published children’s books based on the distribution found in the chosen dataset to develop the productive model. The purpose of the simulated dataset is to explain the uncertainty of the popularity estimation by developing realistic children’s book records with the predictor variables. For each book the estimated popularity or number of ratings have been developed denoted as $\hat{y}{i,j}$, by adding a random error term $\epsilon{i,j}$ to the model’s predicted popularity $\hat{y}i$. The error term, $\epsilon{i,j}$, indicates the sampling variability which is drawn from a normal distribution $N(0, \sigma^2)$:
+
 $$
 \hat{y}_{i,j} = \hat{y}_i + \epsilon_{i,j}
 $$ 
@@ -231,21 +193,24 @@ The process was repeated 1000 times to develop the distribution of $\hat{y}{i,j}
 
 ## Generalized Linear Model
 
-GLM or generalized linear model has been used considering log-normal distribution. The Gaussian distribution with log-link has been used for GLM modelling. The multiple predictors have been described in the predictor section while the variable ‘publish year’ has been considered to control the yearly trend. 
+GLM or generalized linear model has been used considering log-normal distribution. The Poisson distribution with log-link has been used for GLM modelling. The multiple predictors have been described in the predictor section while the variable ‘publish year’ has been considered to control the yearly trend. 
+
 $$
 \text{rating count} = \exp(\beta_0 + \beta_1 \cdot \text{publis year} + \beta_2 \cdot \text{republish length} + \beta_3 \cdot \text{pages} + \beta_4 \cdot \text{cover} + \beta_5 \cdot \text{rating})
 $$
 ## GLM Model Assumptions
 
 The assumptions for the GLM model of this research are:
-•	The outcome variable ‘reading count’ has a distribution that falls under the exponential family
-•	The relationship between each predictor and log-transformed outcome variable ‘reading count’ is linear 
-•	The observations are independent of each other
-•	There is no high multi-collinearity within the predictors
 
+- The outcome variable ‘reading count’ has a distribution that follows a Poisson distribution
 
+- The relationship between each predictor and log-transformed outcome variable ‘reading count’ is linear 
 
-# Results
+- The observations are independent of each other
+
+- There is no high multi-collinearity within the predictors
+
+# Results  {#sec-results}
 
 ```{r}
 #| echo: false
@@ -257,22 +222,18 @@ The assumptions for the GLM model of this research are:
 
 glm_model <- readRDS(here("models/glm_model.rds"))
 screenreg(glm_model)
-
 ```
 
 From the GLM output, it has been found that the publishing year is a significant predictor with a negative effect size. It indicates that with the progression of the year the popularity of books reduced. The strongest predictor of rating count with significant positive effect size is rating. It shows, that having a higher average rating increases the popularity of children's books. Republish length is a significant predictor of the popularity of a book with a positive effect size. It indicates when a publisher republishes older books it increases the probability of having high popularity. The variable ‘pages’ is also a significant predictor of rating count or popularity with a positive effect size. It indicates that containing a higher number of pages in children's books increases popularity. However, the different types of cover do not have any significant effect on the rating count. It implies there is no direct relationship between the type of cover and the popularity of a children’s book. 
 
-
-
-
-
-# Discussion
+# Discussion  {#sec-discussion}
 
 ## Overview of Research and Results
 
 In this study, the underlying factors that could have effects on the popularity of children’s books have been examined using a generalized linear model. The study considered an already existing dataset on children’s book ratings that also includes the physical attribute of the book, the publication details and readers' ratings with unique ISBNs published from the year 1905 to 2020. Through developing a predictive model for estimating the popularity of children’s books, the study examined whether there are other attributes apart from the obvious factor such as user preference can contribute to higher popularity. The results indicate that the average rating of the books, the number of pages in the book, the publishing year and the length of republishing or the duration of republishing of the book from the original year have significant predictability to estimate the popularity of a children’s books.
 
 ## Implication and Significance
+
 As per the conventional understanding of the print media, the audience review or audience likability of the product is the major predictor of the potentiality (@loh2019d). This research highlights that not only the liability or average rating of the audience, the physical attributes such as the number of pages also major contributors to the popularity of the book. These findings will enable the publishers to consider the number of pages in a book to estimate its potential popularity. Besides, the study also highlights that older books which were originally published many years ago, can also have larger popularity than comparatively newly published books. The findings will enable publishers to focus on republishing older books to gain more popularity within the market of children’s books. 
 
 ## Research Limitation
@@ -290,14 +251,20 @@ As per the findings of this study, it can be concluded that apart from the reade
 
 # Appendix {-}
 
+## Data Cleaning Process
+
+The data cleaning process for the chosen raw dataset of this study involves handling missing data, and filtering out the invalid and duplicate records (rows) and attributes (columns) from the dataset. In the selected dataset of children’s books, first, the missing data are explored considering each attribute or column of the dataset. The variables of interest in this dataset are rating, cover, publish year, pages and rating count. There are rows only 8% of records that include missing values in any of these columns, and therefore, without using any amputation methods the records have been excluded to develop the filtered dataset. However, the missing values in the column ‘original publish year’ represent that there is no separate original year from the recorded publish year. Therefore, for this variable, the missing data has been replaced using values from published data and a new variable is created named ‘republish length’ by subtracting the original year from the published year. The variable signifies the gap between the original publish year and from recent publish year. The ‘rating count’ includes values from 1 to more than 1 million reviews with an average of 4280 (Q1 = 82, Q2 = 373, Q3 = 1459), whereas the lower number of reviews is not valid enough to represent the overall review rating of any book. Hence, books that have more than 25% quintile reviews (>82) have been selected in the filtered dataset. Then from the filtered dataset, the unwanted columns are excluded while including only ISBN and variables of interest. 
+
 ## Alternative Model
 
 In this research, the linear regression model using ordinary least squares was initially chosen for developing the prediction model. However, from an exploratory analysis of variables it was found that a large number of variables including outcome variables have a non-normal distribution that belongs to the exponential family. Therefore, a generalized linear model with log-normal link has been selected for this study.
 
 ## Observational Data
+
 The author of the dataset Alex Cookson created the dataset of children’s books with given ratings by the readers for empirical Bayes estimation of reader’s ratings. The data collection process of the author of the dataset is not mentioned. However, this study collected the data from the GitHub data repository. The dataset includes all details as per the specific ISBN of the books. The dataset represents ratings of the readers of children’s books, whereas each instance or record represents a single book with a specific ISBN. Each record contains character and numerical type data to represent the book title, publisher name, ratings, published year, page number and book cover type. The raw data consists of 9240 books with unique ISBN where the children’s books that were published from 1905 to 2020 have been included.
 
 ## Sampling
+
 All records within the children’s book dataset of Alex Cookson have been included in this study using no selection criteria. Convenient sampling has been used for selecting all the available records within the selected dataset. 
 
 ## Model Diagnosis

@@ -37,15 +37,11 @@ analysis_data <- read_parquet("data/02-analysis_data/analysis_data.parquet")
 
 ### Model data ####
 glm_model <- glm(rating_count ~ publish_year + republish_length + pages + as.factor(cover) + rating,
-                   family = gaussian(link = "log"), data = analysis_data)
+                   family = poisson(link = "log"), data = analysis_data)
 summary(glm_model)
 
 #### Save Model ####
 saveRDS(glm_model, "models/glm_model.rds")
-
-
-# Load the GLM model from the saved RDS file
-glm_model <- readRDS("models/glm_model.rds")
 
 # Display the GLM model in a table format
 screenreg(glm_model)
@@ -56,9 +52,6 @@ model_summary <- tidy(glm_model)
 
 # Print model summary to console
 print(model_summary)
-
-# Save model summary as CSV
-write.csv(model_summary, "data/05-model_results/glm_model_summary.csv")
 
 # Create a visual summary of the model coefficients
 plot_model <- ggplot(model_summary, aes(x = term, y = estimate)) +
@@ -72,9 +65,6 @@ plot_model <- ggplot(model_summary, aes(x = term, y = estimate)) +
   ) +
   theme_minimal()
 plot_model
-
-# Save plot
-ggsave("figures/glm_model_coefficients.png", plot_model, width = 10, height = 8)
 
 
 # Predicted values 
@@ -106,5 +96,3 @@ plot_model_analysis<-ggplot(analysis_data, aes(x = glm_predictions, y = observed
   theme_minimal()
 plot_model_analysis
 
-# Save plot
-ggsave("figures/glm_model_Predicted_Observed.png", plot_model, width = 10, height = 8)

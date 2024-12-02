@@ -30,14 +30,10 @@ library(here)
 simulated_data <- read_csv(here("data/00-simulated_data/simulated_data.csv"))
 
 #### Test data ####
-# Test that the dataset has unique ISBN in each record or row no duplicate
-test_that("the dataset has unique ISBNs", {
-  expect_equal(length(unique(simulated_data$isbn)), nrow(simulated_data))
-})
 
-# Test that there are 8 columns in the dataset
-test_that("'8 columns in dataset", {
-  expect_equal(ncol(simulated_data), 8)
+# Test that there are 6 columns in the dataset
+test_that("'6 columns in dataset", {
+  expect_equal(ncol(simulated_data), 6)
 })
 
 # Test that there are less than 10 types of book covers in the dataset 
@@ -51,13 +47,8 @@ test_that("'cover' is character", {
 })
 
 
-# Test that all remaining columns except isbn and cover are numaric
-test_that("all columns except 'isbn' and 'cover' are numeric", {
-  columns_to_check <- simulated_data[,3:8]
-  expect_true(all(sapply(columns_to_check, is.numeric)))
-})
-
 # Test that there are no missing values in the dataset
 test_that("no missing values in dataset", {
   expect_true(all(!is.na(simulated_data)))
 })
+

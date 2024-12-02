@@ -13,38 +13,44 @@ set.seed(853)
 
 
 #### Simulate data ####
-# Book Cover Type
-cover <- c(
-  "Audiobook",
-  "Board Book",
-  "Ebook",
-  "Hardcover",
-  "Kindle Edition",
-  "Paperback"
-)
+library(tibble)
 
+set.seed(123)  # For reproducibility
 
-# Create a dataset by randomly assigning states and parties to divisions
+# Define the covers and their probabilities
+cover <- c("Hardcover", "Paperback", "Spiral-bound", "eBook", "Board Book", "Audiobook")
+
+# Simulated dataset with dependencies
 simulated_data <- tibble(
-  ID = paste0("Book-", sprintf("%04d", sample(1:9999, size = 500, replace = FALSE))),  # Generate unique random book IDs
   publish_year = sample(
     2024:2034,
     size = 500,
     replace = TRUE,
-    prob = exp(seq(0, 1, length.out = 11))  # Exponential bias for 11 years (2024 to 2034)
+    prob = exp(seq(0, 1, length.out = 11))  # Exponential bias for years (newer books more likely)
   ),
-  pages = round(rlnorm(500, meanlog = 5, sdlog = 0.5), 0),
+  pages = round(rlnorm(500, meanlog = 5, sdlog = 0.5), 0),  # Log-normal distribution for pages
   cover = sample(
     cover,
     size = 500,
     replace = TRUE,
-    prob = c(0.02, 3.23, 0.54, 67.62, 0.88, 28.01)  # Rough state population distribution
+    prob = c(0.02, 3.23, 0.54, 67.62, 0.88, 28.01)  # Example cover distribution
   ),
-  rating = pmin(pmax(rnorm(500, mean = 4.03, sd = 0.5), 1), 5),  # Generate ratings, bounded between 1 and 5
-  republish_length = round(rlnorm(500, meanlog = 5.5, sdlog = 0.5), 0) 
-  )
-glm_model <- readRDS(here("models/glm_model.rds"))
-simulated_data$predicted_rating_count <- predict(glm_model, newdata = simulated_data, type = "response")
+  # Ratings depend on pages (longer books may get higher ratings) and cover type
+  rating = pmin(
+    pmax(
+      rnorm(500, mean = 4.03 + 0.001 * pages + ifelse(cover == "Hardcover", 0.5, 0), sd = 0.5),  # Dependency
+      1
+    ),
+    5
+  ),
+  rating_count = rpois(500, 1000000),
+  # Republish length depends on publish year (older books have longer republish lengths)
+  republish_length = round(rlnorm(500, meanlog = 5.5 - 0.1 * (publish_year - 2024), sdlog = 0.5), 0)
+) %>% select(cover, pages, publish_year, rating, rating_count, republish_length)
+
+# Check the first few rows
+head(simulated_data)
 
 #### Save data ####
-write_csv(analysis_data, "data/00-simulated_data/simulated_data.csv")
+write_csv(simulated_data, "data/00-simulated_data/simulated_data.csv")
+

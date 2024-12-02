@@ -31,14 +31,10 @@ library(here)
 analysis_data <- read_parquet(here("data/02-analysis_data/analysis_data.parquet"))
 
 #### Test data ####
-# Test that the dataset has unique ISBN in each record or row no duplicate
-test_that("the dataset has unique ISBNs", {
-  expect_equal(length(unique(analysis_data$isbn)), nrow(analysis_data))
-})
 
-# Test that there are 8 columns in the dataset
-test_that("'8 columns in dataset", {
-  expect_equal(ncol(analysis_data), 8)
+# Test that there are6 columns in the dataset
+test_that("'6 columns in dataset", {
+  expect_equal(ncol(analysis_data), 6)
 })
 
 # Test that there are less than 10 types of book covers in the dataset 
@@ -51,12 +47,6 @@ test_that("'cover' is character", {
   expect_type(analysis_data$cover, "character")
 })
 
-
-# Test that all remaining columns except isbn and cover are numaric
-test_that("all columns except 'isbn' and 'cover' are numeric", {
-  columns_to_check <- analysis_data[,3:8]
-  expect_true(all(sapply(columns_to_check, is.numeric)))
-})
 
 # Test that there are no missing values in the dataset
 test_that("no missing values in dataset", {

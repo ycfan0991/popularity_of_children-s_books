@@ -52,8 +52,6 @@ childrens.books.clean$original_publish_year[is.na(childrens.books.clean$original
 ## Creating column to measure duration of republish year from original publish year
 childrens.books.clean$republish_length<-childrens.books.clean$publish_year-childrens.books.clean$original_publish_year
 
-## Storing cleaned childrens books
-write_csv(childrens.books.clean, "data/01-raw_data/childrens.books.clean.csv")
 
 ## Store records with valid number of ratings
 stats <- summary(childrens.books.clean$rating_count)
@@ -66,39 +64,9 @@ max <- stats["Max."]
 mean_val <- mean(childrens.books$rating_count)
 sd_val <- sd(childrens.books$rating_count)
 
-# Plot the histogram with annotations
-ggplot(childrens.books, aes(x = rating_count)) +
-  geom_histogram(fill = "skyblue", color = "black", bins = 20) +
-  labs(title = "Figure 1: Distribution of Sample Sizes up to 10000 Rating Count",
-    x = "Sample Size of Given Rating",
-    y = "Frequency") + 
-  theme_minimal() + 
-  xlim(0, 10000) + 
-  ylim(0, 2500) +
-  geom_label(aes(x = 2500, y = 2500, 
-                 label = paste0("min: ", round(min, 1))), 
-             color = "black", fontface = "bold") +
-  geom_label(aes(x = 2500, y = 2300, 
-                 label = paste0("Q1: ", round(q1, 1))), 
-             color = "black", fontface = "bold") +
-  geom_label(aes(x = 2500, y = 2100, 
-                 label = paste0("Median: ", round(q2, 1))), 
-             color = "black", fontface = "bold") +
-  geom_label(aes(x = 2500, y = 1900, 
-                 label = paste0("Q3: ", round(q3, 1))), 
-             color = "black", fontface = "bold") +
-  geom_label(aes(x = 2500, y = 1700, 
-                 label = paste0("max: ", round(max, 1))), 
-             color = "black", fontface = "bold") +
-  geom_label(aes(x = 2500, y = 1500, 
-                 label = paste0("Mean: ", round(mean_val, 1))), 
-             color = "black", fontface = "bold")
-
-  
 
 threshold <- quantile(childrens.books.clean$rating_count, 0.25)  # Lower 25% cutoff
-filtered_books <- childrens.books[childrens.books.clean$rating_count >= threshold, ]
-
+filtered_books <- childrens.books.clean[childrens.books.clean$rating_count >= threshold, ]
 
 
 ## Delete columns title, author, publisher
@@ -106,9 +74,8 @@ filtered_books <- filtered_books %>% select(-title, -author, -publisher)
 
 ## Delete columns rating_5, rating_4, rating_3, rating_2, rating_1
 filtered_books <- filtered_books %>% select(-rating_5, -rating_4, -rating_3, 
-                                            -rating_2, -rating_1)
+                                            -rating_2, -rating_1, -original_publish_year, -isbn) %>% na.omit()
 
 #### Save data ####
-
 write_parquet(filtered_books, "data/02-analysis_data/analysis_data.parquet")
 

@@ -40,7 +40,7 @@ hist(analysis_data$rating_count)
 hist(analysis_data$publish_year)
 
 ## Descriptive statistics of numarical variables
-describe(analysis_data[,3:8])
+describe(analysis_data[,2:6])
 
 ## Visualization: Rating Count by Cover
 ggplot(analysis_data, aes(x = cover, y = rating_count)) +
@@ -112,19 +112,6 @@ janitor::tabyl(analysis_data$cover)%>%adorn_pct_formatting(digits = 2)
 janitor::tabyl(analysis_data$publish_year)%>%adorn_pct_formatting(digits = 2)
 
 ## Correlation Analysis for numarical variables
-cor_matrix<-round(cor(analysis_data[3:8]),2)
+cor_matrix<-round(cor(analysis_data[2:6]),2)
 cor_matrix
-## Saving the correlation results
-write.csv(cor_matrix, "data/03-exploratory_data/cor_matrix.csv")
 
-
-## Base Linear Model
-first_model<-lm(rating_count~publish_year+republish_length+pages+
-                as.factor(cover)+rating, data = analysis_data)
-summary(first_model)
-
-## Saving the model
-saveRDS(
-  first_model,
-  file = "models/first_model.rds"
-)
