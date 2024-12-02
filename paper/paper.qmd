@@ -3,7 +3,6 @@ title: "Predicting the Popularity of Children’s Books Considering Reader’s R
 subtitle: ""
 author: 
   - Peter Fan
-
 thanks: "Code and data are available at: [https://github.com/ycfan0991/popularity_of_childrens_books](https://github.com/ycfan0991/popularity_of_childrens_books)."
 date: today
 date-format: long
