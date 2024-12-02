@@ -52,26 +52,45 @@ plot_model <- ggplot(model_summary, aes(x = term, y = estimate)) +
   theme_minimal()
 plot_model
 
-# Predicted values 
-glm_predictions <- predict(glm_model, type = "response")
-lm_predictions <- predict(lm_model, type = "response")
 
-# Observed values
-observed_values <- analysis_data$rating_count
+#### Model comparison and evaluation ####
+# Split Data into Train and Test Sets 
+set.seed(123)  # For reproducibility
+train_indices <- sample(1:nrow(analysis_data), size = 0.8 * nrow(analysis_data))
+train_data <- analysis_data[train_indices, ]
+test_data <- analysis_data[-train_indices, ]
 
-# MSE Calculation
+# Fit GLM model on training data
+glm_model <- glm(rating_count ~ publish_year + republish_length + pages + as.factor(cover) + rating,
+                 family = poisson(link = "log"), data = train_data)
+
+# Fit LM model on training data
+lm_model <- glm(rating_count ~ publish_year + republish_length + pages + as.factor(cover) + rating,
+                data = train_data)
+
+#### Model Analysis on Test Set ####
+# Predicted values for the test set
+glm_predictions <- predict(glm_model, newdata = test_data, type = "response")
+lm_predictions <- predict(lm_model, newdata = test_data, type = "response")
+
+# Observed values in the test set
+observed_values <- test_data$rating_count
+
+# MSE Calculation for the test set
 glm_mse <- mean((observed_values - glm_predictions)^2)
 lm_mse <- mean((observed_values - lm_predictions)^2)
 
-# RMSE Calculation
+# RMSE Calculation for the test set
 glm_rmse <- sqrt(glm_mse)
 lm_rmse <- sqrt(lm_mse)
 
-# Output MSE and RMSE for both models
-cat("GLM Model MSE:", glm_mse, "\n")
-cat("GLM Model RMSE:", glm_rmse, "\n")
-cat("LM Model MSE:", lm_mse, "\n")
-cat("LM Model RMSE:", lm_rmse, "\n")
+# Output MSE and RMSE for test set
+cat("GLM Model MSE (Test Set):", glm_mse, "\n")
+cat("GLM Model RMSE (Test Set):", glm_rmse, "\n")
+cat("LM Model MSE (Test Set):", lm_mse, "\n")
+cat("LM Model RMSE (Test Set):", lm_rmse, "\n")
+
+
 
 # Scatter plot: Predicted vs Observed
 plot_model_analysis<-ggplot(analysis_data, aes(x = glm_predictions, y = observed_values)) +
