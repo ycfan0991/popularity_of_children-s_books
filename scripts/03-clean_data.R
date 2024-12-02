@@ -8,19 +8,6 @@
 
 #### Workspace setup ####
 
-if (!requireNamespace("tidyverse", quietly = TRUE)) {
-  install.packages("tidyverse")
-}
-if (!requireNamespace("here", quietly = TRUE)) {
-  install.packages("here")
-}
-if (!requireNamespace("janitor", quietly = TRUE)) {
-  install.packages("janitor")
-}
-if (!requireNamespace("arrow", quietly = TRUE)) {
-  install.packages("here", repos = c("https://apache.r-universe.dev", "https://cloud.r-project.org"))
-}
-
 library(tidyverse)
 library(janitor)
 library(here)

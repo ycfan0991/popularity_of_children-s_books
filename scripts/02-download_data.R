@@ -5,20 +5,10 @@
 # Contact: peteryc.fan@mail.utoronto.ca
 # License: None
 # Pre-requisites: 
-# - Ensure the 'tidyverse', 'here' packages are installed 
-
-
+# - Ensure the 'tidyverse' packages are installed 
 
 #### Workspace setup ####
-if (!requireNamespace("tidyverse", quietly = TRUE)) {
-  install.packages("tidyverse")
-}
-if (!requireNamespace("here", quietly = TRUE)) {
-  install.packages("here")
-}
-
 library(tidyverse)
-library(here)
 
 #### Download data ####
 

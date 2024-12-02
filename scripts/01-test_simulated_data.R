@@ -4,30 +4,14 @@
 # Date: 21 November 2024
 # Contact: peteryc.fan@mail.utoronto.ca
 # Pre-requisites:
-# - Ensure the 'tidyverse', 'arrow', testthat' packages are installed 
+# - Ensure the 'tidyverse', testthat' packages are installed 
 
 #### Workspace setup ####
-if (!requireNamespace("tidyverse", quietly = TRUE)) {
-  install.packages("tidyverse")
-}
-if (!requireNamespace("testthat", quietly = TRUE)) {
-  install.packages("testthat")
-}
-if (!requireNamespace("arrow", quietly = TRUE)) {
-  install.packages("arrow", repos = c("https://apache.r-universe.dev", "https://cloud.r-project.org"))
-}
-if (!requireNamespace("here", quietly = TRUE)) {
-  install.packages("here")
-}
-
 library(tidyverse)
 library(testthat)
-library(arrow)
-library(here)
-
 
 # Load the cleaned data
-simulated_data <- read_csv(here("data/00-simulated_data/simulated_data.csv"))
+simulated_data <- read_csv("data/00-simulated_data/simulated_data.csv")
 
 #### Test data ####
 

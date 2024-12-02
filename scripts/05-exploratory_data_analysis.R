@@ -4,25 +4,10 @@
 # Date: 21 November 2024
 # Contact: peteryc.fan@mail.utoronto.ca
 # Pre-requisites:
-# - Ensure the 'tidyverse', 'rstanarm', janitor', 'here', 'arrow', 'psych' packages are installed 
+# - Ensure the 'tidyverse', janitor', 'here', 'arrow' packages are installed 
 
 
 #### Workspace setup ####
-## Check if required packaged are installed
-if (!requireNamespace("tidyverse", quietly = TRUE)) {
-  install.packages("tidyverse")
-}
-if (!requireNamespace("psych", quietly = TRUE)) {
-  install.packages("psych")
-}
-if (!requireNamespace("janitor", quietly = TRUE)) {
-  install.packages("janitor")
-}
-if (!requireNamespace("arrow", quietly = TRUE)) {
-  install.packages("arrow", repos = c("https://apache.r-universe.dev", "https://cloud.r-project.org"))
-}
-
-## load library
 library(tidyverse)
 library(janitor)
 library(psych)

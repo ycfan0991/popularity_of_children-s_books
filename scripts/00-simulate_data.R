@@ -4,24 +4,20 @@
 # Date: 22 November 2024
 # Contact: peteryc.fan@mail.utoronto.ca
 # Pre-requisites:
-# - Ensure the 'tidyverse', 'janitor', 'here', 'arrow' packages are installed 
+# - Ensure the 'tidyverse' packages are installed 
 
 
 #### Workspace setup ####
 library(tidyverse)
 set.seed(853)
 
-
 #### Simulate data ####
-library(tibble)
-
-set.seed(123)  # For reproducibility
 
 # Define the covers and their probabilities
 cover <- c("Hardcover", "Paperback", "Spiral-bound", "eBook", "Board Book", "Audiobook")
 
 # Simulated dataset with dependencies
-simulated_data <- tibble(
+simulated_data <- data.frame(
   publish_year = sample(
     2024:2034,
     size = 500,
@@ -34,9 +30,9 @@ simulated_data <- tibble(
     size = 500,
     replace = TRUE,
     prob = c(0.02, 3.23, 0.54, 67.62, 0.88, 28.01)  # Example cover distribution
-  ),
+  )) %>%
   # Ratings depend on pages (longer books may get higher ratings) and cover type
-  rating = pmin(
+  mutate(rating = pmin(
     pmax(
       rnorm(500, mean = 4.03 + 0.001 * pages + ifelse(cover == "Hardcover", 0.5, 0), sd = 0.5),  # Dependency
       1
